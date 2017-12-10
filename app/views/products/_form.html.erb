@@ -1,0 +1,46 @@
+<%= nested_form_for(@product) do |f| %>
+  <% if @product.errors.any? %>
+    <div id='error_explanation' class='alert alert-warning'>
+      <h2><%= pluralize(@product.errors.count, 'error') %> prohibited this product from being saved:</h2>
+      <ul>
+      <% @product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :name , class: 'col-md-2'%>
+      <%= f.text_field :name, class: 'col-md-4' %>
+    </div>
+  </div>
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :description, class: 'col-md-2' %>
+      <%= f.text_area :description, class: 'col-md-4' %>
+    </div>
+  </div>
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :price, class: 'col-md-2' %>
+      <%= f.number_field :price, step: 0.01, class: 'col-md-4' %>
+    </div>
+  </div>
+  <div class='form-group'>
+    <%= f.fields_for :categorizations do |c| %>
+      <div class='category'>
+        <%= c.label :sub_sub_category, 'Sub Sub Category', class: 'col-md-2' %>
+        <%= c.select :sub_sub_category_id, sub_sub_category_list(@product), { include_blank: 'Available Categories' }, required: true, class: 'col-md-4' %>
+        <%= c.link_to_remove 'Remove', style: 'padding-left: 10px;' %>
+      </div>
+      <br/></br/>
+    <% end %>
+    <%= f.link_to_add 'Add a category', :categorizations, class: 'btn btn-success' %><br/></br/>
+  </div>
+
+  <div class='actions'>
+    <%= f.submit 'Submit', class: 'btn btn-primary pull-left' %>
+  </div>
+<% end %>

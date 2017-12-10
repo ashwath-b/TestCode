@@ -1,0 +1,58 @@
+<nav class='navbar navbar-inverse'>
+  <div class='collapse navbar-collapse' id='navbar-collapse'>
+  	<ul class='nav navbar-nav'>
+  		<% if (categ = Category.where(parent_id: nil).where(product_exists: true)).present? %>
+  			<% categ.each do |cat| %>
+  				<li class='dropdown'>
+  					<%= link_to cat.name, "/#{cat.id}", class: 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+            <ul class='dropdown-menu'>
+  						<% cat.sub_categories.where(product_exists: true).each do |sub_cat| %>
+  							<li class='sub-category'>
+  								<%= sanitize link_to sub_cat.name, "/#{cat.id}/#{sub_cat.id}" %>
+  							</li>
+
+  							<% sub_cat.sub_categories.where(product_exists: true).each do |sub_sub_cat| %>
+    							<li class='sub-sub-category' style='padding-left:10px;'>
+    								<%= sanitize link_to sub_sub_cat.name, "/#{cat.id}/#{sub_cat.id}/#{sub_sub_cat.id}" %>
+                  </li>
+  							<% end %>
+
+  						<% end %>
+  					</ul>
+  				</li>
+  			<% end %>
+  		<% end %>
+  	</ul>
+  </div>
+</nav>
+
+<div class='product_list'>
+  <p id='notice'><%= notice %></p>
+
+  <h1>Listing Products</h1>
+
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Categories</th>
+        <th colspan='3'></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= product.description %></td>
+          <td><%= product.price %></td>
+          <td><%= product.categories_list %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+</div>
