@@ -33,6 +33,8 @@ gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'nested_form'
+gem 'searchkick'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

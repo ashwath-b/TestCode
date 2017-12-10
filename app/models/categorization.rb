@@ -15,6 +15,26 @@ class Categorization < ActiveRecord::Base
   after_save :update_product_exists, if: proc { sub_sub_category_id_changed? && !sub_sub_category_id_was.nil? }
   before_destroy :update_category_if_last
 
+  searchkick
+
+  def search_data
+    {
+      category_id: category_id,
+      sub_category_id: sub_category_id,
+      sub_sub_category_id: sub_sub_category_id,
+      product_id: product_id
+      # product_name: product.name,
+      # sub_sub_category_name: sub_sub_category.name
+    }
+  end
+
+  def self.elastic_search(where: {})
+    [:category_id, :sub_category_id, :sub_sub_category_id].each do |key|
+      where.delete(key) if where[key].blank?
+    end
+    search(where: where)
+  end
+
   private
   def set_other_fields
     cat = Category.find(sub_sub_category_id)

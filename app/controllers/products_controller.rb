@@ -65,23 +65,18 @@ class ProductsController < ApplicationController
   end
 
   def public_view
-    # @cats = []
-    # Category.where(parent_id: nil).where(product_exists: true).each do |cat|
-    #   @cats << cat
-    #   cat.sub_categories.where(product_exists: true).each do |sub_cat|
-    #     @cats << sub_cat
-    #     sub_cat.sub_categories.where(product_exists: true).each do |sub_sub_cat|
-    #       @cats << sub_sub_cat
-    #     end
-    #   end
-    # end
-
     if params[:category_id].present? && params[:category_id].match(/\A\d+\z/)
-      @categorizations = Categorization.where(search_params)
+      @categorizations = Categorization.elastic_search(where: { category_id: params[:category_id], sub_category_id: params[:sub_category_id], sub_sub_category_id: params[:sub_sub_category_id] })
       @products = @categorizations.map{|c| c.product}.uniq
     else
       @products = Product.all
     end
+    # if params[:category_id].present? && params[:category_id].match(/\A\d+\z/)
+    #   @categorizations = Categorization.where(search_params)
+    #   @products = @categorizations.map{|c| c.product}.uniq
+    # else
+    #   @products = Product.all
+    # end
   end
 
   private
