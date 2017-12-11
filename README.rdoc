@@ -10,3 +10,8 @@ Admin view:
 
 PublicView:
   /
+
+constraints and assumptions:
+
+  - First we need to create category then sub_category then sub_sub_category.
+  - Product can be added to only sub_sub_category. That will internally add the product to respective category and sub_category.
